@@ -1,6 +1,6 @@
 # 🎨 PowerShell Profile (Pretty PowerShell)
 
-A stylish and functional PowerShell profile that looks and feels almost as good as a Linux terminal.
+Davids stylish and functional PowerShell profile that looks and feels almost as good as a Linux terminal.
 
 ## ⚡ One Line Install (Elevated PowerShell Recommended)
 
