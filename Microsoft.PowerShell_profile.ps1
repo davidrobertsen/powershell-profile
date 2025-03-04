@@ -60,7 +60,7 @@ if (Test-Path($ChocolateyProfile)) {
 # Check for Profile Updates
 function Update-Profile {
     try {
-        $url = "https://raw.githubusercontent.com/ChrisTitusTech/powershell-profile/main/Microsoft.PowerShell_profile.ps1"
+        $url = "https://raw.githubusercontent.com/davidrobertsen/powershell-profile/main/Microsoft.PowerShell_profile.ps1"
         $oldhash = Get-FileHash $PROFILE
         Invoke-RestMethod $url -OutFile "$env:temp/Microsoft.PowerShell_profile.ps1"
         $newhash = Get-FileHash "$env:temp/Microsoft.PowerShell_profile.ps1"
@@ -202,7 +202,20 @@ function Get-PubIP { (Invoke-WebRequest http://ifconfig.me/ip).Content }
 function winutil {
 	irm https://christitus.com/win | iex
 }
+# Update All
+function wup {
+    Write-Output "Starting winget upgrade..."
+    winget upgrade --all --silent --accept-package-agreements --accept-source-agreements
+    Write-Output "winget upgrade completed."
 
+    Write-Output "Importing PSWindowsUpdate module..."
+    Import-Module PSWindowsUpdate
+    Write-Output "PSWindowsUpdate module imported."
+
+    Write-Output "Starting Windows Update..."
+    Get-WindowsUpdate -Install -AcceptAll -AutoReboot
+    Write-Output "Windows Update completed."
+}
 # Open WinUtil pre-release
 function winutildev {
 	irm https://christitus.com/windev | iex
