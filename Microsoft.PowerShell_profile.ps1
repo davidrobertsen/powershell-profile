@@ -202,6 +202,13 @@ function Get-PubIP { (Invoke-WebRequest http://ifconfig.me/ip).Content }
 function winutil {
 	irm https://christitus.com/win | iex
 }
+
+# Initiate Full System Scan Windows Defender
+function avscan {
+   Write-Output "MpCmdRun: Full Scan Started. Progress will be displayed in the Defender interface."
+   Start-MpScan -ScanType FullScan
+}
+
 # Update All
 function wup {
     Write-Output "Starting winget upgrade..."
