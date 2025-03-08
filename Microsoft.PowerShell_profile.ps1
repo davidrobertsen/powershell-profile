@@ -42,6 +42,17 @@ if ($debug) {
 if ([bool]([System.Security.Principal.WindowsIdentity]::GetCurrent()).IsSystem) {
     [System.Environment]::SetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT', 'true', [System.EnvironmentVariableTarget]::Machine)
 }
+# Anette
+function Anette {
+   Write-Output "Kjære Anette, Hver dag med deg er som en vakker drøm som jeg aldri vil våkne fra. Din kjærlighet, omsorg og støtte gjør livet mitt komplett. Du er ikke bare min kone, men også min beste venn og sjelevenn.
+   
+   Din skjønnhet, både innvendig og utvendig, lyser opp hver dag. Din latter er musikk for mine ører, og ditt smil er solskinnet som varmer mitt hjerte. Jeg er evig takknemlig for alle de små og store øyeblikkene vi deler sammen.
+
+Du er min klippe, min inspirasjon og min største glede. Jeg elsker deg mer enn ord kan uttrykke, og jeg ser frem til å tilbringe resten av livet med deg ved min side.
+
+Med all min kjærlighet,"
+   
+}
 
 # Initial GitHub.com connectivity check with 1 second timeout
 $global:canConnectToGitHub = Test-Connection github.com -Count 1 -Quiet -TimeoutSeconds 1
