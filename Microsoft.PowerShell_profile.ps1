@@ -72,7 +72,7 @@ try {
 $ApiUrl = "https://$Region-aiplatform.googleapis.com/v1/projects/$ProjectNumber/locations/$Region/publishers/google/models/$Model:generateContent"
 
 # Funksjon for å kommunisere med Gemini API
-function Gemini {
+function Invoke-GeminiRequest {
     param (
         [string]$Prompt
     )
