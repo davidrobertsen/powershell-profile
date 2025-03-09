@@ -54,68 +54,6 @@ Med all min kjærlighet, David <3"
    
 }
 
-# Konfigurer Google Cloud prosjektinformasjon
-$ProjectNumber = "221352948567"
-$ProjectId = "pshell-453208"
-$Region = "us-central1" # Endre region om nødvendig.
-$Model = "gemini-pro" # Eller gemini-pro-vision
-
-# Hent autentiseringstoken ved hjelp av gcloud
-try {
-    $AccessToken = gcloud auth print-access-token
-} catch {
-    Write-Error "Kunne ikke hente autentiseringstoken: $_"
-    return
-}
-
-# Konfigurer Gemini API endepunkt
-$ApiUrl = "https://$Region-aiplatform.googleapis.com/v1/projects/$ProjectNumber/locations/$Region/publishers/google/models/$Model:generateContent"
-
-# Funksjon for å kommunisere med Gemini API
-function Invoke-GeminiRequest {
-    param (
-        [string]$Prompt
-    )
-
-    try {
-        $Headers = @{
-            "Authorization" = "Bearer $AccessToken"
-            "Content-Type" = "application/json"
-        }
-
-        $Body = @{
-            "contents" = @(
-                @{
-                    "parts" = @(
-                        @{
-                            "text" = $Prompt
-                        }
-                    )
-                }
-            )
-        } | ConvertTo-Json
-
-        $Response = Invoke-RestMethod -Uri $ApiUrl -Method Post -Headers $Headers -Body $Body -ContentType "application/json"
-
-        # Hent tekst fra API-svaret
-        if ($Response.candidates -and $Response.candidates.Count -gt 0 -and $Response.candidates[0].content.parts -and $Response.candidates[0].content.parts.Count -gt 0) {
-            return $Response.candidates[0].content.parts[0].text
-        } else {
-            return "Klarte ikke å hente tekst fra API-svaret."
-        }
-
-    } catch {
-        Write-Error $_
-        return "Det oppstod en feil under API-kallet."
-    }
-}
-
-# Eksempel på bruk
-$UserPrompt = "Forklar hva en tjenestekonto er i Google Cloud."
-$GeminiResponse = Invoke-GeminiRequest -Prompt $UserPrompt
-
-Write-Host "Gemini-svar:"
-Write-Host $GeminiResponse
 
 # Initial GitHub.com connectivity check with 1 second timeout
 $global:canConnectToGitHub = Test-Connection github.com -Count 1 -Quiet -TimeoutSeconds 1
