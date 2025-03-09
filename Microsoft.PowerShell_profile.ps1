@@ -54,6 +54,7 @@ Med all min kjærlighet, David <3"
    
 }
 
+# Sleep
 function DeepSleep {
 rundll32.exe powrprof.dll,SetSuspendState 0,1,0
 }
