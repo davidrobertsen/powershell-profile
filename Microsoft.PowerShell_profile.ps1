@@ -54,6 +54,9 @@ Med all min kjærlighet, David <3"
    
 }
 
+function Sleep {
+rundll32.exe powrprof.dll,SetSuspendState 0,1,0
+}
 
 # Initial GitHub.com connectivity check with 1 second timeout
 $global:canConnectToGitHub = Test-Connection github.com -Count 1 -Quiet -TimeoutSeconds 1
