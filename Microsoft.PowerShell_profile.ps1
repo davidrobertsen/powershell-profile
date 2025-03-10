@@ -48,7 +48,7 @@ function Anette {
    
    Din skjønnhet, både innvendig og utvendig, lyser opp hver dag. Din latter er musikk for mine ører, og ditt smil er solskinnet som varmer mitt hjerte. Jeg er evig takknemlig for alle de små og store øyeblikkene vi deler sammen.
 
-Du er min klippe, min inspirasjon og min største glede. Jeg elsker deg mer enn ord kan uttrykke, og jeg ser frem til å tilbringe resten av livet med deg ved min side.
+Du er min klippe, min inspirasjon og min største glede. Jeg elsker deg mer enn ord kan uttrykke, og jeg ser frem til å tilbringe resten av evigheten med deg ved min side.
 
 Med all min kjærlighet, David <3"
    
