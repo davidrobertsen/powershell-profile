@@ -56,6 +56,7 @@ Med all min kjærlighet, David <3"
 
 # Sleep
 function DeepSleep {
+ Write-Output "Going to sleep....."
 rundll32.exe powrprof.dll,SetSuspendState 0,1,0
 }
 
@@ -678,8 +679,8 @@ Use '$($PSStyle.Foreground.Magenta)Show-Help$($PSStyle.Reset)' to display this h
     Write-Host $helpText
 }
 
-if (Test-Path "$PSScriptRoot\CTTcustom.ps1") {
-    Invoke-Expression -Command "& `"$PSScriptRoot\CTTcustom.ps1`""
-}
+#if (Test-Path "$PSScriptRoot\CTTcustom.ps1") {
+#    Invoke-Expression -Command "& `"$PSScriptRoot\CTTcustom.ps1`""
+#}
 
 Write-Host "$($PSStyle.Foreground.Yellow)Use 'Show-Help' to display help$($PSStyle.Reset)"
