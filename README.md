@@ -3,7 +3,8 @@
 A stylish and functional PowerShell profile that looks and feels almost as good as a Linux terminal.
 
 ## ⚡ One Line Install (Elevated PowerShell Recommended)
-
+Set-ExecutionPolicy RemoteSigned
+    Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile winget.msixbundle
 Execute the following command in an elevated PowerShell window to install the PowerShell profile:
 
 ```
