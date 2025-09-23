@@ -60,6 +60,17 @@ function DeepSleep {
 rundll32.exe powrprof.dll,SetSuspendState 0,1,0
 }
 
+# Install basic programs
+function BaseTools {
+Install-Module -Name PSWindowsUpdate -Force
+Get-Package -Name PSWindowsUpdate
+winget install 9WZDNCRFJ3B4
+winget install 9P95ZZKTNRN4
+winget install Microsoft.PCManager.Beta
+}
+
+
+
 # Initial GitHub.com connectivity check with 1 second timeout
 $global:canConnectToGitHub = Test-Connection github.com -Count 1 -Quiet -TimeoutSeconds 1
 
