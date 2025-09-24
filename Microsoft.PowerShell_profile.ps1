@@ -64,10 +64,11 @@ rundll32.exe powrprof.dll,SetSuspendState 0,1,0
 function BaseTools {
 Install-Module -Name PSWindowsUpdate -Force
 Get-Package -Name PSWindowsUpdate
-winget install 9WZDNCRFJ3B4
-winget install 9P95ZZKTNRN4
-winget install 9N8G5RFZ9XK3
-winget install 9pm860492szd
+winget install --id 9WZDNCRFJ3B4 --silent --accept-package-agreements --accept-source-agreements
+winget install --id 9P95ZZKTNRN4 --silent --accept-package-agreements --accept-source-agreements
+winget install --id 9N8G5RFZ9XK3 --silent --accept-package-agreements --accept-source-agreements
+winget install --id 9pm860492szd --silent --accept-package-agreements --accept-source-agreements
+
 }
 
 
