@@ -237,8 +237,30 @@ function avscan {
    Start-MpScan -ScanType FullScan
 }
 
-# Update All
 function wup {
+    Write-Output "Do you want to close all Office programs? (Y/N)"
+    
+    $confirmation = $null
+    $job = Start-Job { Read-Host }
+    $job | Wait-Job -Timeout 5 | Out-Null
+
+    if ($job.State -eq 'Completed') {
+        $confirmation = Receive-Job $job
+    } else {
+        Write-Output "No response within 5 seconds. Proceeding to force-close Office apps..."
+        Stop-Job $job
+    }
+
+    if ($confirmation -eq 'Y') {
+        Write-Output "Closing all Office programs..."
+        Stop-Process -Name "WINWORD","EXCEL","OUTLOOK","POWERPNT" -Force
+    } elseif ($confirmation -eq 'N') {
+        Write-Output "User chose not to close Office apps. Skipping process termination."
+    } elseif (-not $confirmation) {
+        Write-Output "No input received. Office apps were force-closed."
+        Stop-Process -Name "WINWORD","EXCEL","OUTLOOK","POWERPNT" -Force
+    }
+
     Write-Output "Starting winget upgrade..."
     winget upgrade --all --silent --accept-package-agreements --accept-source-agreements
     Write-Output "winget upgrade completed."
@@ -251,6 +273,7 @@ function wup {
     Get-WindowsUpdate -Install -AcceptAll -AutoReboot
     Write-Output "Windows Update completed."
 }
+
 # Open WinUtil pre-release
 function winutildev {
 	irm https://christitus.com/windev | iex
