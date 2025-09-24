@@ -66,7 +66,8 @@ Install-Module -Name PSWindowsUpdate -Force
 Get-Package -Name PSWindowsUpdate
 winget install 9WZDNCRFJ3B4
 winget install 9P95ZZKTNRN4
-winget install Microsoft.PCManager.Beta
+winget install 9N8G5RFZ9XK3
+winget install 9pm860492szd
 }
 
 
