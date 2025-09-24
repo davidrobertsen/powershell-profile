@@ -238,27 +238,29 @@ function avscan {
 }
 
 function wup {
-    Write-Output "Do you want to close all Office programs? (Y/N)"
-    
-    $confirmation = $null
-    $job = Start-Job { Read-Host }
-    $job | Wait-Job -Timeout 5 | Out-Null
+    $timeout = 5
+    $startTime = Get-Date
 
-    if ($job.State -eq 'Completed') {
-        $confirmation = Receive-Job $job
-    } else {
-        Write-Output "No response within 5 seconds. Proceeding to force-close Office apps..."
-        Stop-Job $job
+    Write-Host "Do you want to close all Office programs? (Y/N) — You have $timeout seconds to respond..."
+
+    $inputAvailable = $false
+    while ((Get-Date) -lt $startTime.AddSeconds($timeout)) {
+        if ($Host.UI.RawUI.KeyAvailable) {
+            $key = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $inputAvailable = $true
+            break
+        }
+        Start-Sleep -Milliseconds 200
     }
 
-    if ($confirmation -eq 'Y') {
+    if ($inputAvailable -and $key.Character -eq 'Y') {
         Write-Output "Closing all Office programs..."
-        Stop-Process -Name "WINWORD","EXCEL","OUTLOOK","POWERPNT" -Force
-    } elseif ($confirmation -eq 'N') {
+        Stop-Process -Name "WINWORD","EXCEL","OUTLOOK","POWERPNT" -ErrorAction SilentlyContinue
+    } elseif ($inputAvailable -and $key.Character -eq 'N') {
         Write-Output "User chose not to close Office apps. Skipping process termination."
-    } elseif (-not $confirmation) {
-        Write-Output "No input received. Office apps were force-closed."
-        Stop-Process -Name "WINWORD","EXCEL","OUTLOOK","POWERPNT" -Force
+    } else {
+        Write-Output "No input received within $timeout seconds. Office apps will be force-closed."
+        Stop-Process -Name "WINWORD","EXCEL","OUTLOOK","POWERPNT" -ErrorAction SilentlyContinue
     }
 
     Write-Output "Starting winget upgrade..."
