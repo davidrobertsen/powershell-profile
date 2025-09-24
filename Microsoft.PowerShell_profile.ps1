@@ -253,18 +253,37 @@ function wup {
         Start-Sleep -Milliseconds 200
     }
 
+    $officeRunning = Get-Process -Name "WINWORD","EXCEL","OUTLOOK","POWERPNT" -ErrorAction SilentlyContinue
+
     if ($inputAvailable -and $key.Character -eq 'Y') {
         Write-Output "Closing all Office programs..."
         Stop-Process -Name "WINWORD","EXCEL","OUTLOOK","POWERPNT" -ErrorAction SilentlyContinue
+        $officeRunning = $null
     } elseif ($inputAvailable -and $key.Character -eq 'N') {
         Write-Output "User chose not to close Office apps. Skipping process termination."
-    } else {
+    } elseif (-not $inputAvailable) {
         Write-Output "No input received within $timeout seconds. Office apps will be force-closed."
         Stop-Process -Name "WINWORD","EXCEL","OUTLOOK","POWERPNT" -ErrorAction SilentlyContinue
+        $officeRunning = $null
     }
 
-    Write-Output "Starting winget upgrade..."
-    winget upgrade --all --silent --accept-package-agreements --accept-source-agreements
+    Write-Output "Starting selective winget upgrade..."
+
+    $packages = winget upgrade | Where-Object {
+        if ($officeRunning) {
+            $_ -notmatch "Microsoft.Office"
+        } else {
+            $true
+        }
+    }
+
+    foreach ($pkg in $packages) {
+        $id = ($pkg -split '\s{2,}')[0]
+        if ($id) {
+            winget upgrade --id "$id" --silent --accept-package-agreements --accept-source-agreements
+        }
+    }
+
     Write-Output "winget upgrade completed."
 
     Write-Output "Importing PSWindowsUpdate module..."
@@ -275,6 +294,7 @@ function wup {
     Get-WindowsUpdate -Install -AcceptAll -AutoReboot
     Write-Output "Windows Update completed."
 }
+
 
 # Open WinUtil pre-release
 function winutildev {
