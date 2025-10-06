@@ -246,6 +246,8 @@ function wup {
     Write-Host "Do you want to close all Office programs? (Y/N) — You have $timeout seconds to respond..."
 
     $inputAvailable = $false
+    $key = $null
+
     while ((Get-Date) -lt $startTime.AddSeconds($timeout)) {
         if ($Host.UI.RawUI.KeyAvailable) {
             $key = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
@@ -271,19 +273,20 @@ function wup {
 
     Write-Output "Starting selective winget upgrade..."
 
-    $packages = winget upgrade | Where-Object {
-        if ($officeRunning) {
-            $_ -notmatch "Microsoft.Office"
+    try {
+        $packagesJson = winget upgrade --output json | ConvertFrom-Json
+        $packagesToUpgrade = if ($officeRunning) {
+            $packagesJson | Where-Object { $_.Id -notlike "*Office*" }
         } else {
-            $true
+            $packagesJson
         }
-    }
 
-    foreach ($pkg in $packages) {
-        $id = ($pkg -split '\s{2,}')[0]
-        if ($id) {
-            winget upgrade --id "$id" --silent --accept-package-agreements --accept-source-agreements
+        foreach ($pkg in $packagesToUpgrade) {
+            Write-Output "Upgrading: $($pkg.Name) ($($pkg.Id))"
+            winget upgrade --id "$($pkg.Id)" --silent --accept-package-agreements --accept-source-agreements
         }
+    } catch {
+        Write-Output "Failed to parse winget upgrade output or no packages found."
     }
 
     Write-Output "winget upgrade completed."
@@ -296,6 +299,7 @@ function wup {
     Get-WindowsUpdate -Install -AcceptAll -AutoReboot
     Write-Output "Windows Update completed."
 }
+
 
 
 # Open WinUtil pre-release
