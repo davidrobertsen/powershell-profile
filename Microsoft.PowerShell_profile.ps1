@@ -273,20 +273,26 @@ function wup {
 
     Write-Output "Starting selective winget upgrade..."
 
-    try {
-        $packagesJson = winget upgrade --output json | ConvertFrom-Json
-        $packagesToUpgrade = if ($officeRunning) {
-            $packagesJson | Where-Object { $_.Id -notlike "*Office*" }
-        } else {
-            $packagesJson
-        }
+    $wingetOutput = winget upgrade | Select-String -Pattern '^\S' | ForEach-Object { $_.Line }
+    $packages = @()
 
-        foreach ($pkg in $packagesToUpgrade) {
-            Write-Output "Upgrading: $($pkg.Name) ($($pkg.Id))"
-            winget upgrade --id "$($pkg.Id)" --silent --accept-package-agreements --accept-source-agreements
+    foreach ($line in $wingetOutput) {
+        $columns = $line -split '\s{2,}'
+        if ($columns.Count -ge 2) {
+            $name = $columns[0]
+            $id = $columns[1]
+
+            if ($officeRunning -and $id -like "*Office*") {
+                continue
+            }
+
+            $packages += $id
         }
-    } catch {
-        Write-Output "Failed to parse winget upgrade output or no packages found."
+    }
+
+    foreach ($id in $packages) {
+        Write-Output "Upgrading: $id"
+        winget upgrade --id "$id" --silent --accept-package-agreements --accept-source-agreements
     }
 
     Write-Output "winget upgrade completed."
