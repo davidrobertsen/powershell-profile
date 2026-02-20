@@ -254,13 +254,9 @@ function avscan {
 }
 
 function wup {
-   
+    Write-Output "Starting winget upgrade..."
 
-    Write-Output "Starting  winget upgrade..."
-
-
-        winget upgrade --all --silent --accept-package-agreements --accept-source-agreements
-    }
+    winget upgrade --all --silent --accept-package-agreements --accept-source-agreements
 
     Write-Output "winget upgrade completed."
 
@@ -272,7 +268,6 @@ function wup {
     Get-WindowsUpdate -Install -AcceptAll -AutoReboot
     Write-Output "Windows Update completed."
 }
-
 
 
 # Open WinUtil pre-release
